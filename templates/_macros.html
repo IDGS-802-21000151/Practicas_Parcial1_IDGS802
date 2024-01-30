@@ -1,0 +1,5 @@
+{% macro input(field) %}
+{{ field.label }}
+
+{{ field(**kwargs)|safe }}
+{% endmacro %}

@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% import "_macros.html" as macros %}
+<div class="d-flex align-items-center justify-content-center vh-100">
+    <div class="row gap-5">
+        <div class="container mt-5 bg-light shadow p-5 col">
+            <form action="/distancia-entre-puntos" method="POST">
+                {{ macros.input(form.x1, class="form-control") }}
+                {{ macros.input(form.y1, class="form-control") }}
+                {{ macros.input(form.x2, class="form-control") }}
+                {{ macros.input(form.y2, class="form-control") }}
+
+                <button type="submit" class="btn btn-success mt-5">Validar distancia</button>
+            </form>
+        </div>
+
+        {% if distanciaCalculada %}
+        <div class="container mt-5 bg-light shadow p-5 col">
+            <h1>Resultado</h1>
+
+            <p>La distancia calculada es: {{ distanciaCalculada }}</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
