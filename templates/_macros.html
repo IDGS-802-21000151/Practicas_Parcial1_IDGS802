@@ -1,5 +1,86 @@
-{% macro input(field) %}
+{% macro input(field, placeholder = "") %}
 {{ field.label }}
 
-{{ field(**kwargs)|safe }}
+{{ field(class="form-control", placeholder = placeholder ,**kwargs)|safe }}
+{% endmacro %}
+
+{% macro select(field, placeholder="") %}
+<div class="form-floating mt-3">
+    <select class="form-select" name="{{ field.name }}" id="{{ field.id }}" aria-label="Floating label select example">
+        {% for choice, label in field.choices %}
+        <option value="{{ choice }}" {% if field.data==choice %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+    </select>
+    {{ field.label(for="{{ field.id }}") }}
+</div>
+{% endmacro %}
+
+{% macro radio(field) %}
+<div class="form-group mt-3">
+    {{ field.label }}
+
+    <div class="row mt-2">
+        {% for value, label in field.choices %}
+        <div class="col-6">
+            <div class="form-check d-flex align-items-center justify-content-center">
+                <input class="form-check-input mx-1" type="radio" name="{{ field.name }}" id="{{ field.name ~ '_' ~ value }}"
+                    value="{{ value }}" {% if value==field.data %}checked{% endif %}>
+                <label class="form-check-label" for="{{ field.name ~ '_' ~ value }}">
+                    {{ label }}
+                </label>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endmacro %}
+
+{% macro generarTDBanda(valor, signo = "", tipo="banda") %}
+    {% set textColor = "black" %}
+
+    {% if valor == "0" or valor == "x1" and tipo == "banda"%}
+        {% set hexColor = "#000000" %} <!-- Negro -->
+        {% set nombreColor = "Negro" %}
+        {% set textColor = "white" %}
+    {% elif valor == "1" or valor == "x10" and tipo == "banda" %}
+        {% set hexColor = "#B67352" %} <!-- Cafe -->
+        {% set nombreColor = "Café" %}
+        {% set textColor = "white" %}
+    {% elif valor == "2" or valor == "x100" and tipo == "banda" %}
+        {% set hexColor = "#D24545" %} <!-- Rojo -->
+        {% set nombreColor = "Rojo" %}
+        {% set textColor = "white" %}
+    {% elif valor == "3" or valor == "x1000" and tipo == "banda" %}
+        {% set hexColor = "#ED7D31" %} <!-- Naranja -->
+        {% set nombreColor = "Naranja" %}
+    {% elif valor == "4" or valor == "x10000" and tipo == "banda" %}
+        {% set hexColor = "#FDE767" %} <!-- Amarillo -->
+        {% set nombreColor = "Amarillo" %}
+    {% elif valor == "5" and tipo == "banda" or valor == "x100000" and tipo == "banda" %}
+        {% set hexColor = "#43766C" %} <!-- Verde -->
+        {% set nombreColor = "Verde" %}
+        {% set textColor = "white" %}
+    {% elif valor == "6" or valor == "x1000000" and tipo == "banda" %}
+        {% set hexColor = "#0B60B0" %} <!-- Azul -->
+        {% set textColor = "white" %}
+        {% set nombreColor = "Azul" %}
+    {% elif valor == "7" or valor == "x10000000" and tipo == "banda" %}
+        {% set hexColor = "#492E87" %} <!-- Morado -->
+        {% set textColor = "white" %}
+        {% set nombreColor = "Morado" %}
+    {% elif valor == "8" or valor == "x100000000" and tipo == "banda" %}
+        {% set hexColor = "#C7C8CC" %} <!-- Gris -->
+        {% set nombreColor = "Gris" %}
+    {% elif valor == "9" or valor == "x1000000000" and tipo == "banda" %}
+        {% set hexColor = "#FFFFFF" %} <!-- Blanco -->
+        {% set nombreColor = "Blanco" %}
+    {% elif valor == "5" and tipo == "tolerancia"%} <!-- Oro -->
+        {% set nombreColor = "Oro" %}
+        {% set hexColor = "#F4CE14" %}
+    {% elif valor == "10" and tipo == "tolerancia"%} <!-- Plata -->
+        {% set hexColor = "#B4B4B8" %}
+        {% set nombreColor = "Plata" %}
+    {% endif %}
+
+    <td style="background-color: {{ hexColor }}; color: {{ textColor }}">{{ nombreColor }} - {{ valor }}{{ signo }}</td>
 {% endmacro %}

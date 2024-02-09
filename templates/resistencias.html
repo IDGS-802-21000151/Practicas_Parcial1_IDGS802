@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{% import "_macros.html" as macros %}
+<div class="container-fluid min-vh-100 d-flex justify-content-center align-items-center flex-column">
+    <div class="card shadow-lg bg-light">
+        <div class="card-body">
+            <div class="card-title h1">Calculadora de resistencias</div>
+
+            <form action="/calculadora-resistencias" method="POST">
+                {{ macros.select(resistenciasFormulario.primeraBanda, "Selecciona la primera banda") }}
+                {{ macros.select(resistenciasFormulario.segundaBanda, "Selecciona la segunda banda") }}
+                {{ macros.select(resistenciasFormulario.multiplicador, "Selecciona la tercera banda") }}
+                {{ macros.radio(resistenciasFormulario.tolerancia) }}
+
+                <button type="submit" class="btn btn-success w-100 mt-3 p-2">Calcular</button>
+            </form>
+        </div>
+    </div>
+
+    {% if resultado %}
+    <div class="card shadow-lg bg-light w-75 mt-5">
+        <div class="card-body">
+            <div class="card-title h1">Resultado</div>
+
+            <table class="table text-center table-striped-columns ">
+                <thead>
+                    <tr>
+                        <td>Primera banda</td>
+                        <td>Segunda banda</td>
+                        <td>Tercera banda</td>
+                        <td>Tolerancia</td>
+                        <td>Valor resistencia</td>
+                        <td>Valor máximo</td>
+                        <td>Valor mínimo</td>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        {{ macros.generarTDBanda(resultado.primeraBanda) }}
+                        {{ macros.generarTDBanda(resultado.segundaBanda) }}
+                        {{ macros.generarTDBanda(resultado.multiplicador) }}
+                        {{ macros.generarTDBanda(resultado.tolerancia, "%", "tolerancia") }}
+                        <td>{{ resultado.valor }}</td>
+                        <td>{{ resultado.valorMaximo }}</td>
+                        <td>{{ resultado.valorMinimo }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

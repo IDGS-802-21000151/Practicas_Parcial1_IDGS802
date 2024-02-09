@@ -30,6 +30,48 @@ def cargarInicio():
     
         return render_template("operaciones.html", resultado=resultado, tipoOperacion=tipoOperacion, operacion = operacion)
 
+@app.route("/calculadora-resistencias", methods=["GET", "POST"])
+def cargarCalculadoraInicio():
+    resistenciasFormulario = forms.ResistenciaFormulario(request.form)
+    
+    if(request.method == "POST"):
+        print("LLEGO METODO POST")
+        primeraBanda = resistenciasFormulario.primeraBanda.data
+        segundaBanda = resistenciasFormulario.segundaBanda.data
+        
+        valorBandas = int(str(primeraBanda) + str(segundaBanda))
+        
+        multiplicador = int(resistenciasFormulario.multiplicador.data)
+        
+        toleranciaCompleto = int(resistenciasFormulario.tolerancia.data)
+        
+        print(f"Tolerancia antes: {toleranciaCompleto}")
+        
+        tolerancia = float(toleranciaCompleto * 0.01)
+        
+        print(f"Tolerancia después: {tolerancia}")
+        
+        valor = valorBandas * multiplicador
+        
+        valorMaximo = valor + (valor * tolerancia)
+        valorMinimo = valor - (valor * tolerancia)
+        
+        resultado = {
+            "primeraBanda": str(primeraBanda),
+            "segundaBanda":  str(segundaBanda),
+            "multiplicador": "x" + str(multiplicador),
+            "tolerancia":  str(toleranciaCompleto),
+            "valor":  str(valor),
+            "valorMaximo":  str(valorMaximo),
+            "valorMinimo":  str(valorMinimo)
+        }
+        
+        print(resultado)
+        
+        return render_template("resistencias.html", resistenciasFormulario = resistenciasFormulario, resultado = resultado)
+        
+    return render_template("resistencias.html", resistenciasFormulario = resistenciasFormulario)
+
 @app.route("/distancia-entre-puntos", methods=["GET", "POST"])
 def cargarAlumnos():
     distanciaFormulario = forms.distanciaFormulario(request.form)
